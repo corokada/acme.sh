@@ -4781,8 +4781,10 @@ installcronjob() {
     _err "`pwd`/service_restart.sh"
     return 1
   fi
-  echo "add cron job"
-  echo "$random_minute 1 * * * `pwd`/service_restart.sh"
+  if ! $_CRONTAB -l | grep "service_restart.sh"; then
+    echo "add cron job"
+    echo "$random_minute 1 * * * `pwd`/service_restart.sh"
+  fi
 }
 
 uninstallcronjob() {
