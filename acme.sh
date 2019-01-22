@@ -4802,8 +4802,10 @@ uninstallcronjob() {
   if [ "$cr" ]; then
     if _exists uname && uname -a | grep solaris >/dev/null; then
       $_CRONTAB -l | sed "/$PROJECT_ENTRY --cron/d" | $_CRONTAB --
+      $_CRONTAB -l | sed "/$PROJECT_ENTRY\/service_restart.sh/d" | $_CRONTAB --
     else
       $_CRONTAB -l | sed "/$PROJECT_ENTRY --cron/d" | $_CRONTAB -
+      $_CRONTAB -l | sed "/$PROJECT_ENTRY\/service_restart.sh/d" | $_CRONTAB -
     fi
     LE_WORKING_DIR="$(echo "$cr" | cut -d ' ' -f 9 | tr -d '"')"
     _info LE_WORKING_DIR "$LE_WORKING_DIR"
