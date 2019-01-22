@@ -4764,11 +4764,13 @@ installcronjob() {
       $_CRONTAB -l | {
         cat
         echo "$random_minute 0 * * * $lesh --cron --home \"$LE_WORKING_DIR\" $_c_entry> /dev/null"
+        echo "$random_minute 1 * * * `pwd`/service_restart.sh > /dev/null"
       } | $_CRONTAB --
     else
       $_CRONTAB -l | {
         cat
         echo "$random_minute 0 * * * $lesh --cron --home \"$LE_WORKING_DIR\" $_c_entry> /dev/null"
+        echo "$random_minute 1 * * * `pwd`/service_restart.sh > /dev/null"
       } | $_CRONTAB -
     fi
   else
@@ -4778,10 +4780,9 @@ installcronjob() {
     _err "Install cron job failed. You need to manually renew your certs."
     _err "Or you can add cronjob by yourself:"
     _err "$lesh --cron --home \"$LE_WORKING_DIR\" > /dev/null"
-    _err "`pwd`/service_restart.sh"
     return 1
   fi
-  if ! $_CRONTAB -l | grep "service_restart.sh"; then
+  if ! $_CRONTAB -l | grep -sq "service_restart.sh"; then
     echo "add cron job"
     echo "$random_minute 1 * * * `pwd`/service_restart.sh"
   fi
