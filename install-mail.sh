@@ -36,5 +36,10 @@ sed -i -e "/ssl_cert /c\ssl_cert = <${CERTDIR}/${DOMAIN}/fullchain.cer" /etc/dov
 sed -i -e "/ssl_key /c\ssl_key = <${CERTDIR}/${DOMAIN}/${DOMAIN}.key" /etc/dovecot/conf.d/10-ssl.conf
 
 # サービス再起動
-/etc/init.d/postfix reload
-/etc/init.d/dovecot reload
+if [ -f /etc/init.d/postfix ]; then
+    /etc/init.d/postfix reload
+    /etc/init.d/dovecot reload
+else
+    /bin/systemctl reload postfix
+    /bin/systemctl reload dovecot
+fi
