@@ -42,7 +42,11 @@ sed -i -e "s/SSLVerifyDepth/#SSLVerifyDepth/" ${CONFFILE}
 # サービス再起動
 /usr/sbin/apachectl configtest
 if [ $? = 0 ]; then
-    /etc/init.d/httpd graceful
+    if [ -f /etc/init.d/httpd ]; then
+        /etc/init.d/httpd graceful
+    else
+        /bin/systemctl reload httpd
+    fi
 else
     echo "サービス再起動失敗"
 fi
